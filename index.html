@@ -1,215 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>YOLOv8 Object Detection for Kids</title>
-<style>
-  body {
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    background: #ffefd5;
-    margin: 0;
-    padding: 20px;
-    text-align: center;
-  }
-  h1 {
-    color: #ff4500;
-    font-size: 2em;
-  }
-  #videoWrapper, #uploadedWrapper {
-    position: relative;
-    display: inline-block;
-  }
-  video, canvas, img {
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    max-width: 100%;
-  }
-  #canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-  #captureBtn, #uploadInput, #clearUploadBtn {
-    margin-top: 15px;
-    font-size: 18px;
-    padding: 12px 16px;
-    border-radius: 8px;
-    border: none;
-    background-color: #32cd32;
-    color: white;
-    cursor: pointer;
-  }
-  #captureBtn:hover, #clearUploadBtn:hover {
-    background-color: #3cb371;
-  }
-  #audioControls {
-    margin-top: 20px;
-    display: none;
-    text-align: center;
-  }
-  .speak-btn {
-    cursor: pointer;
-    background: #32cd32;
-    border: none;
-    color: white;
-    padding: 6px 10px;
-    border-radius: 8px;
-    font-size: 14px;
-    margin: 5px;
-  }
-  .speak-btn:hover {
-    background: #3cb371;
-  }
-  input[type="file"] {
-    display: none;
-  }
-  label[for="uploadInput"] {
-    background-color: #32cd32;
-    color: white;
-    padding: 12px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 18px;
-    display: inline-block;
-    margin-top: 15px;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>YOLOv8 Object Detection for Kids</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: #ffefd5;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #ff4500;
+      font-size: 2em;
+    }
+    #videoWrapper, #uploadedWrapper {
+      position: relative;
+      display: inline-block;
+    }
+    video, canvas, img {
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      max-width: 100%;
+    }
+    #canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    #captureBtn, #uploadInput, #clearUploadBtn {
+      margin-top: 15px;
+      font-size: 18px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: none;
+      background-color: #32cd32;
+      color: white;
+      cursor: pointer;
+    }
+    #captureBtn:hover, #clearUploadBtn:hover {
+      background-color: #3cb371;
+    }
+    #audioControls {
+      margin-top: 20px;
+      display: none;
+      text-align: center;
+    }
+    .speak-btn {
+      cursor: pointer;
+      background: #32cd32;
+      border: none;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin: 5px;
+    }
+    .speak-btn:hover {
+      background: #3cb371;
+    }
+    input[type="file"] {
+      display: none;
+    }
+    label[for="uploadInput"] {
+      background-color: #32cd32;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      display: inline-block;
+      margin-top: 15px;
+    }
+  </style>
 </head>
 <body>
-<h1>🎨 Object Detection & Fun Learning! 🐾</h1>
-<p>Mari belajar bahasa Inggris dengan deteksi objek. Ambil sebuah foto atau upload!</p>
+  <h1>🎨 Object Detection & Fun Learning! 🐾</h1>
+  <p>Mari belajar bahasa Inggris dengan deteksi objek. Ambil sebuah foto atau upload!</p>
 
-<div id="videoWrapper">
-  <video id="video" width="640" height="480" autoplay muted></video>
-  <canvas id="canvas" width="640" height="480"></canvas>
-</div>
-<br />
-<button id="captureBtn">📸 Capture Photo</button>
-<br />
+  <div id="videoWrapper">
+    <video id="video" width="640" height="480" autoplay muted></video>
+    <canvas id="canvas" width="640" height="480"></canvas>
+  </div>
+  <br />
+  <button id="captureBtn">📸 Capture Photo</button>
+  <br />
 
-<label for="uploadInput">📂 Upload Photo</label>
-<input type="file" id="uploadInput" accept="image/*" />
-<button id="clearUploadBtn" style="display:none;">❌ Clear Upload</button>
+  <label for="uploadInput">📂 Upload Photo</label>
+  <input type="file" id="uploadInput" accept="image/*" />
+  <button id="clearUploadBtn" style="display:none;">❌ Clear Upload</button>
 
-<div id="uploadedWrapper" style="margin-top: 20px; display: none;">
-  <h2>Uploaded Photo</h2>
-  <img id="uploadedImage" />
-  <canvas id="uploadedCanvas"></canvas>
-</div>
+  <div id="uploadedWrapper" style="margin-top: 20px; display: none;">
+    <h2>Uploaded Photo</h2>
+    <img id="uploadedImage" />
+    <canvas id="uploadedCanvas"></canvas>
+  </div>
 
-<div id="audioControls">
-  <h3>🔊 Pronunciation Controls</h3>
-  <div id="pronounceButtons"></div>
-</div>
+  <div id="audioControls">
+    <h3>🔊 Pronunciation Controls</h3>
+    <div id="pronounceButtons"></div>
+  </div>
 
-<script>
-const video = document.getElementById("video");
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+  <script>
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
 
-const uploadedImage = document.getElementById("uploadedImage");
-const uploadedCanvas = document.getElementById("uploadedCanvas");
-const uploadedCtx = uploadedCanvas.getContext("2d");
+    const uploadedImage = document.getElementById("uploadedImage");
+    const uploadedCanvas = document.getElementById("uploadedCanvas");
+    const uploadedCtx = uploadedCanvas.getContext("2d");
 
-const pronounceButtons = document.getElementById("pronounceButtons");
-const audioControls = document.getElementById("audioControls");
+    const pronounceButtons = document.getElementById("pronounceButtons");
+    const audioControls = document.getElementById("audioControls");
 
-const API_URL = "http://localhost:5000/detect"; // Ganti jika backend sudah di-deploy
+    const API_URL = "https://oxyura-detect.hf.space/detect"; // Ganti jika backend sudah di-deploy
 
-// Mulai kamera
-navigator.mediaDevices.getUserMedia({ video: true })
-  .then(stream => video.srcObject = stream)
-  .catch(err => alert("Gagal mengakses kamera!"));
+    // Fungsi memulai kamera
+    async function startCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+      } catch (err) {
+        alert("Gagal mengakses kamera!");
+      }
+    }
 
-// Ambil gambar dari video dan kirim ke backend
-document.getElementById("captureBtn").onclick = async () => {
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  ctx.drawImage(video, 0, 0);
-  const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg"));
-  await sendToBackend(blob, ctx);
-};
+    // Fungsi refresh kamera
+    async function refreshCamera() {
+      const stream = video.srcObject;
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+      setTimeout(() => {
+        startCamera();
+      }, 300);
+    }
 
-// Upload foto
-document.getElementById("uploadInput").addEventListener("change", async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+    // Jalankan kamera saat halaman dimuat
+    startCamera();
 
-  const img = new Image();
-  img.onload = async () => {
-    uploadedCanvas.width = img.width;
-    uploadedCanvas.height = img.height;
-    uploadedCtx.clearRect(0, 0, uploadedCanvas.width, uploadedCanvas.height);
-    uploadedCtx.drawImage(img, 0, 0);
-    document.getElementById("uploadedWrapper").style.display = "block";
-    document.getElementById("clearUploadBtn").style.display = "inline-block";
-    await sendToBackend(file, uploadedCtx);
-  };
-  img.src = URL.createObjectURL(file);
-  uploadedImage.src = img.src;
-});
+    // Capture dari kamera
+    document.getElementById("captureBtn").onclick = async () => {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      ctx.drawImage(video, 0, 0);
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg"));
+      await sendToBackend(blob, ctx);
+    };
 
-document.getElementById("clearUploadBtn").onclick = () => {
-  document.getElementById("uploadedWrapper").style.display = "none";
-  document.getElementById("uploadInput").value = "";
-  document.getElementById("clearUploadBtn").style.display = "none";
-  pronounceButtons.innerHTML = "";
-  audioControls.style.display = "none";
-};
+    // Upload gambar
+    document.getElementById("uploadInput").addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
 
-// Kirim gambar ke backend dan tampilkan hasil
-async function sendToBackend(imageBlob, context) {
-  const formData = new FormData();
-  formData.append("image", imageBlob);
+      const img = new Image();
+      img.onload = async () => {
+        uploadedCanvas.width = img.width;
+        uploadedCanvas.height = img.height;
+        uploadedCtx.clearRect(0, 0, uploadedCanvas.width, uploadedCanvas.height);
+        uploadedCtx.drawImage(img, 0, 0);
+        document.getElementById("uploadedWrapper").style.display = "block";
+        document.getElementById("clearUploadBtn").style.display = "inline-block";
+        await sendToBackend(file, uploadedCtx);
+      };
+      img.src = URL.createObjectURL(file);
+      uploadedImage.src = img.src;
+    });
 
-  try {
-    const res = await fetch(API_URL, { method: "POST", body: formData });
-    if (!res.ok) throw new Error("Response not OK");
-    const data = await res.json();
-    drawDetections(data.detections, context);
-    generateTTSButtons(data.detections.map(d => d.label));
-  } catch (err) {
-    alert("Deteksi gagal!");
-    console.error(err);
-  }
-}
+    // Clear upload
+    document.getElementById("clearUploadBtn").onclick = () => {
+      document.getElementById("uploadedWrapper").style.display = "none";
+      document.getElementById("uploadInput").value = "";
+      document.getElementById("clearUploadBtn").style.display = "none";
+      pronounceButtons.innerHTML = "";
+      audioControls.style.display = "none";
+    };
 
-// Gambar hasil deteksi
-function drawDetections(detections, context) {
-  context.lineWidth = 2;
-  context.strokeStyle = "red";
-  context.font = "16px Arial";
-  context.fillStyle = "red";
+    // Kirim gambar ke backend
+    async function sendToBackend(imageBlob, context) {
+      const formData = new FormData();
+      formData.append("image", imageBlob);
 
-  detections.forEach(det => {
-    const [x1, y1, x2, y2] = det.bbox;
-    context.strokeRect(x1, y1, x2 - x1, y2 - y1);
-    context.fillText(`${det.label} (${(det.confidence * 100).toFixed(1)}%)`, x1, y1 > 16 ? y1 - 5 : y1 + 15);
-  });
-}
+      try {
+        const res = await fetch(API_URL, { method: "POST", body: formData });
+        if (!res.ok) throw new Error("Response not OK");
+        const data = await res.json();
+        drawDetections(data.detections, context);
+        generateTTSButtons(data.detections.map(d => d.label));
+      } catch (err) {
+        alert("Deteksi gagal!");
+        console.error(err);
+      } finally {
+        await refreshCamera();
+      }
+    }
 
-// Text-to-speech
-function generateTTSButtons(labels) {
-  pronounceButtons.innerHTML = "";
-  audioControls.style.display = "block";
+    // Gambar hasil deteksi
+    function drawDetections(detections, context) {
+      context.lineWidth = 2;
+      context.strokeStyle = "red";
+      context.font = "16px Arial";
+      context.fillStyle = "red";
 
-  const uniqueLabels = [...new Set(labels)];
-  uniqueLabels.forEach(label => {
-    const btn = document.createElement("button");
-    btn.className = "speak-btn";
-    btn.textContent = `🔊 ${label}`;
-    btn.onclick = () => speak(label);
-    pronounceButtons.appendChild(btn);
-  });
-}
+      detections.forEach(det => {
+        const [x1, y1, x2, y2] = det.bbox;
+        context.strokeRect(x1, y1, x2 - x1, y2 - y1);
+        context.fillText(`${det.label} (${(det.confidence * 100).toFixed(1)}%)`, x1, y1 > 16 ? y1 - 5 : y1 + 15);
+      });
+    }
 
-function speak(text) {
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "en-US";
-  window.speechSynthesis.speak(utterance);
-}
-</script>
+    // Buat tombol suara
+    function generateTTSButtons(labels) {
+      pronounceButtons.innerHTML = "";
+      audioControls.style.display = "block";
 
+      const uniqueLabels = [...new Set(labels)];
+      uniqueLabels.forEach(label => {
+        const btn = document.createElement("button");
+        btn.className = "speak-btn";
+        btn.textContent = `🔊 ${label}`;
+        btn.onclick = () => speak(label);
+        pronounceButtons.appendChild(btn);
+      });
+    }
+
+    // Text to speech
+    function speak(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-US";
+      window.speechSynthesis.speak(utterance);
+    }
+  </script>
 </body>
 </html>
